@@ -13,14 +13,7 @@ const client = new DiscordJS.Client({
 client.on('ready', () => {
     console.log('Readyifying...')
     global.startTime = new Date()
-
     client.user.setActivity("Chess", { type: "COMPETING"})
-
-    // application commands
-    client.api.applications(client.user.id).guilds(process.env.GUILD_ID).commands.post({data: {
-        name: 'ping',
-        description: 'ping pong!'
-    }})
 
     console.log('Bot readied at ' + global.startTime.toLocaleString() + '.')
 })
@@ -47,8 +40,8 @@ function alert(text) {
 
 client.on('messageCreate', (message) => {
     if(message.author.bot)
-        return // anyone not a bot
-    
+        return
+    // anyone not a bot
     
     
     if(message.member.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) {
@@ -59,20 +52,10 @@ client.on('messageCreate', (message) => {
 
         if(message.member.permissions.has([Permissions.FLAGS.ADMINISTRATOR])) {
             // admin
-            //if(message.content == '/shutdown')
-                //shutdown()
+            if(message.content == '/shutdown')
+                shutdown()
         }
     }
-})
-
-client.ws.on('INTERACTION_CREATE', async interaction => {
-    client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-        type: 4,
-        data: {
-          content: 'hello world!'
-        }
-    }})
-    //shutdown()
 })
 
 client.login(process.env.TOKEN)
