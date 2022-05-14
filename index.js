@@ -1,61 +1,42 @@
-import DiscordJS, { Client, Intents, Permissions } from 'discord.js'
-import dotenv from 'dotenv'
-dotenv.config()
-console.log("Bot starting")
+const fs = require('fs');
+const { Client, Collection, Intents } = require('discord.js');
+const { token, welcomeID } = require('./config.json');
 
-const client = new DiscordJS.Client({
-    intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES
-    ]
-})
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS] });
 
-client.on('ready', () => {
-    console.log('Readyifying...')
-    global.startTime = new Date()
-    client.user.setActivity("Chess", { type: "COMPETING"})
+client.commands = new Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-    console.log('Bot readied at ' + global.startTime.toLocaleString() + '.')
-})
-
-function shutdown() { // todo Time ran for
-    console.log('Shut down at ' + new Date().toLocaleString() + '.\nRan for ' + NaN)
-    client.destroy()
-    process.exit(1)
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
 }
 
-function restart() {
-    console.log('Restarted at ' + new Date().toLocaleString() + '.')
-    client.destroy()
-    client.login(process.env.TOKEN)
-}
 
-function alert(text) {
-    try {
-        client.channels.cache.get(process.env.C_ALERT).send(text)
-    } catch(err) {
-        console.log('ERROR: Cannot send alert.')
-    }
-}
+client.once('ready', () => {
+	console.log('Ready!');
+});
 
-client.on('messageCreate', (message) => {
-    if(message.author.bot)
-        return
-    // anyone not a bot
-    
-    
-    if(message.member.permissions.has([Permissions.FLAGS.BAN_MEMBERS])) {
-        // can ban and kick
-        if (message.content == '/restart')
-            restart()
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
 
+	const { commandName } = interaction;
 
-        if(message.member.permissions.has([Permissions.FLAGS.ADMINISTRATOR])) {
-            // admin
-            if(message.content == '/shutdown')
-                shutdown()
-        }
-    }
-})
+	const command = client.commands.get(interaction.commandName);
 
-client.login(process.env.TOKEN)
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
+// make sure it's an async function
+client.on('messageReactionAdd', (reaction, user) => {
+	console.log("add");
+  });
+
+client.login(token);

@@ -1,0 +1,22 @@
+**MEETING UPDATES** @everyone
+The online events for the next quarter have been decided as the following:
+
+```diff
++ Tuesday Blitz Arena
+Blitz games are extremely short, in this case lasting no more than 10 total minutes per game. Arenas are also extremely low-commitment, and any who are interested are free to join and leave whenever they wish.
+-   Time Control: 5+0
+-   Length:       90 Minutes
+-   When:         Tuesdays from 9:00pm-11:30pm
+
++ Saturdays Rapid Swiss
+Rapids are a medium length time format - the average rapid game takes between 10 and 30 minutes. Unlike Arenas, Swiss tournaments have a large time commitment. Anyone interested in joining should stay for the entire duration.
+-   Time Control: 10+5
+-   Length:       5 rounds (2-2.5 hours with maximum players)
+-   When:         Saturdays starting at 5:00pm
+```
+*In order to play in any of these events, please join our Lichess team at: https://lichess.org/team/olympic-college-chess-club*
+*and enter the code: 708260*
+
+If anyone is interested in playing, please sign up early by clicking on the desired event on the homescreen for our Lichess team, and click the big "Join" button on the top right.
+
+Once in-person events have been decided, another post will be made. Happy playing!
